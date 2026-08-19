@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_macros.html" import stamp %}
+{% block title %}Invigil — Submitted{% endblock %}
+{% block content %}
+
+<p class="eyebrow">Session #{{ session.id }} · {{ student.name }}</p>
+<h1>Exam submitted</h1>
+
+<div class="panel result-panel" style="margin-top: 20px;">
+  {% set total_flags = counts.values() | sum %}
+  {{ stamp('flagged' if total_flags else 'verified') }}
+
+  <div class="score-block">
+    <div class="num">{{ session.score }}/{{ session.total_questions }}</div>
+    <div class="label">Score</div>
+  </div>
+
+  <div style="flex:1; min-width: 220px;">
+    <p class="mono" style="color: var(--ink-text-dim); font-size: 0.85rem;">
+      Duration {{ (session.duration_seconds() // 60) }}m {{ (session.duration_seconds() % 60) }}s
+      &middot; Ended {{ session.end_time.strftime('%H:%M:%S UTC') if session.end_time else '—' }}
+    </p>
+  </div>
+</div>
+
+<div class="panel">
+  <h3 style="margin-bottom: 14px;">Proctoring summary</h3>
+  {% if counts %}
+  <div class="summary-grid">
+    {% for type, n in counts.items() %}
+    <div class="summary-tile">
+      <div class="n">{{ n }}</div>
+      <div class="t">{{ labels.get(type, type) }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="mono" style="color: var(--verified);">No flags raised — clean session.</p>
+  {% endif %}
+</div>
+
+<div style="margin-top: 24px; display:flex; gap:12px;">
+  <a class="btn btn-outline" href="{{ url_for('index') }}">Back to roster</a>
+  <a class="btn btn-outline" href="{{ url_for('session_detail', session_id=session.id) }}">View full timeline</a>
+</div>
+
+{% endblock %}

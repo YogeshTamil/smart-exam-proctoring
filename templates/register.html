@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Invigil — Register{% endblock %}
+{% block content %}
+
+<p class="eyebrow">Candidate enrollment</p>
+<h1>Enroll your face</h1>
+<p style="max-width: 56ch; color: var(--ink-text-dim);">
+  Capture at least three clear, front-facing photos. These train the
+  recognizer that verifies your identity during the exam — good, even
+  lighting helps accuracy.
+</p>
+
+<div class="panel" style="margin-top: 24px;">
+  <div class="capture-layout">
+    <div>
+      <div class="capture-frame" id="captureFrame">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <div class="bracket bracket--tl"></div>
+        <div class="bracket bracket--tr"></div>
+        <div class="bracket bracket--bl"></div>
+        <div class="bracket bracket--br"></div>
+        <div class="capture-frame__hint">Center one face in frame</div>
+      </div>
+      <div style="margin-top: 14px; display:flex; gap:10px; align-items:center;">
+        <button type="button" class="btn btn-primary" id="captureBtn">Capture photo</button>
+        <span class="capture-count" id="captureCount">0 captured</span>
+      </div>
+      <div class="thumb-strip" id="thumbStrip"></div>
+    </div>
+
+    <div>
+      <form id="registerForm" onsubmit="return false;">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="email">Email <span style="text-transform:none;">(optional)</span></label>
+          <input type="email" id="email" name="email" autocomplete="email">
+        </div>
+        <p id="formMsg" class="mono" style="font-size:0.82rem; color: var(--flagged); min-height: 1.2em;"></p>
+        <button type="button" class="btn btn-primary" id="submitBtn" disabled>Register &amp; continue to exam</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}

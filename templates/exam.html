@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Invigil — Exam{% endblock %}
+{% block content %}
+
+<div id="examRoot"
+     data-session-id="{{ session.id }}"
+     data-student-id="{{ student.id }}"
+     data-duration="{{ duration_seconds }}">
+
+  <div class="exam-header">
+    <div class="exam-title">
+      <h1>Sample Assessment</h1>
+      <p class="mono">Candidate: {{ student.name }} · Session #{{ session.id }}</p>
+    </div>
+    <div class="proctor-rail">
+      <div class="camera-badge" id="cameraBadge">
+        <video id="proctorVideo" autoplay playsinline muted></video>
+        <div class="camera-badge__dot"></div>
+      </div>
+      <div class="clock-ring" id="clockRing">
+        <svg viewBox="0 0 84 84">
+          <circle class="track" cx="42" cy="42" r="36"></circle>
+          <circle class="progress" id="clockProgress" cx="42" cy="42" r="36"
+                  stroke-dasharray="226.19" stroke-dashoffset="0"></circle>
+        </svg>
+        <div class="clock-ring__label mono" id="clockLabel">--:--</div>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="captureCanvas" style="display:none;"></canvas>
+
+  <form id="examForm" onsubmit="return false;">
+    <div class="exam-grid">
+      {% for q in questions %}
+      <div class="question-card">
+        <div class="question-card__num mono">Question {{ loop.index }} of {{ questions|length }}</div>
+        <p class="prompt">{{ q.prompt }}</p>
+        <div class="options">
+          {% for opt in q.options %}
+          <label class="option">
+            <input type="radio" name="q_{{ q.id }}" value="{{ opt }}">
+            <span class="bubble"></span>
+            <span>{{ opt }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="exam-actions">
+      <div class="violation-tally mono" id="violationTally">0 flags logged this session</div>
+      <button type="button" class="btn btn-primary" id="submitExamBtn">Submit exam</button>
+    </div>
+  </form>
+</div>
+
+<div class="toast-stack" id="toastStack"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/exam.js') }}"></script>
+{% endblock %}

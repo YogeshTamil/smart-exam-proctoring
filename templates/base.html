@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Smart Exam Proctoring{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}theme-paper{% endblock %}">
+
+  <header class="site-header">
+    <div class="wrap {% block header_wrap %}{% endblock %}">
+      <div class="site-header__row">
+        <div class="site-header__brand">
+          <span class="mark">Invigil</span>
+          <span class="eyebrow">Smart Exam Proctoring</span>
+        </div>
+        <nav class="site-header__nav">
+          <a href="{{ url_for('index') }}">Roster</a>
+          <a href="{{ url_for('register_page') }}">Register</a>
+          <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap {% block main_wrap %}{% endblock %}">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap {% block footer_wrap %}{% endblock %}">
+      Invigil · local prototype · biometric data stays on this machine
+    </div>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Invigil — Roster{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <p class="eyebrow">Candidate roster</p>
+  <h1>Register a face, then sit the exam.</h1>
+  <p>
+    Every candidate enrolls a short set of reference photos before their first
+    exam. From then on, the proctor watches for a visible, matching face,
+    a quiet room, and a focused browser tab — logging anything else for
+    review afterward.
+  </p>
+  <div style="margin-top: 20px; display:flex; gap:12px;">
+    <a class="btn btn-primary" href="{{ url_for('register_page') }}">Register a candidate</a>
+    <a class="btn btn-outline" href="{{ url_for('dashboard') }}">Open dashboard</a>
+  </div>
+</section>
+
+{% if students %}
+<div class="roster">
+  {% for s in students %}
+  <div class="roster-card">
+    <div class="roster-card__name">{{ s.name }}</div>
+    <div class="roster-card__meta">
+      {% if s.is_enrolled %}
+        <span class="pill pill--verified"><span class="pill-dot"></span>Enrolled · {{ s.face_sample_count }} samples</span>
+      {% else %}
+        <span class="pill pill--warn"><span class="pill-dot"></span>Incomplete enrollment</span>
+      {% endif %}
+    </div>
+    <div style="margin-top: 8px;">
+      {% if s.is_enrolled %}
+        <a class="btn btn-primary btn-sm" href="{{ url_for('exam_page', student_id=s.id) }}">Start exam</a>
+      {% else %}
+        <a class="btn btn-outline btn-sm" href="{{ url_for('register_page') }}">Finish registration</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <p class="mono">No candidates registered yet.</p>
+  <p>Register the first candidate to enroll their face and unlock the exam.</p>
+</div>
+{% endif %}
+
+{% endblock %}

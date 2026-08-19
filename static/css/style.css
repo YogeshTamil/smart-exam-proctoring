@@ -1,0 +1,299 @@
+/* ==========================================================================
+   Smart Exam Proctoring — design system
+   Concept: "the invigilator's desk" — official exam-hall paperwork
+   (hall tickets, bubble sheets, wall clocks, rubber stamps) meets a modern
+   monitoring console. Parchment + brass for student-facing pages, ink navy
+   for the admin control room.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* -- color tokens -- */
+  --ink: #14181F;
+  --ink-2: #1E2530;
+  --ink-3: #262F3D;
+  --paper: #EDE7D8;
+  --paper-2: #E3DCC7;
+  --paper-3: #D8CFB3;
+  --brass: #C69A3E;
+  --brass-deep: #A97F2A;
+  --ink-text: #1B2430;
+  --ink-text-dim: #4B5563;
+  --paper-text: #EDEAE0;
+  --paper-text-dim: #A7ADB8;
+  --verified: #4B7B5C;
+  --flagged: #B3432B;
+  --warn: #B3832B;
+  --line: rgba(27, 36, 48, 0.14);
+  --line-dark: rgba(237, 234, 224, 0.14);
+
+  /* -- type -- */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace;
+
+  --radius: 3px;
+  --radius-lg: 6px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.theme-ink {
+  background: var(--ink);
+  color: var(--paper-text);
+}
+
+a { color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0 0 0.4em;
+  letter-spacing: -0.01em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.01em;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.theme-ink .eyebrow { color: var(--brass); }
+
+:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* -------------------------------------------------------------- layout -- */
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.wrap--narrow { max-width: 640px; }
+.wrap--wide { max-width: 1180px; }
+
+/* -------------------------------------------------------------- header -- */
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  padding: 22px 0;
+}
+
+.theme-ink .site-header { border-bottom-color: var(--line-dark); }
+
+.site-header__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.site-header__brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.site-header__brand .mark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.32rem;
+}
+
+.site-header__nav {
+  display: flex;
+  gap: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.site-header__nav a {
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+}
+.site-header__nav a:hover { border-bottom-color: currentColor; }
+
+main { padding: 40px 0 80px; }
+
+/* -------------------------------------------------------------- panels -- */
+
+.panel {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+}
+
+.theme-ink .panel {
+  background: var(--ink-2);
+  border-color: var(--line-dark);
+}
+
+.panel + .panel { margin-top: 20px; }
+
+.rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 20px 0;
+}
+.theme-ink .rule { border-top-color: var(--line-dark); }
+
+/* -------------------------------------------------------------- forms --- */
+
+label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-text-dim);
+  margin-bottom: 6px;
+}
+.theme-ink label { color: var(--paper-text-dim); }
+
+.field { margin-bottom: 20px; }
+
+.field input[type="text"],
+.field input[type="email"] {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 10px 2px;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid var(--line);
+  color: inherit;
+  border-radius: 0;
+}
+.theme-ink .field input { border-bottom-color: var(--line-dark); }
+
+.field input:focus {
+  border-bottom-color: var(--brass-deep);
+  outline: none;
+}
+
+/* -------------------------------------------------------------- buttons - */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 12px 22px;
+  border-radius: var(--radius);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--brass);
+  color: #1A1204;
+  border-color: var(--brass);
+}
+.btn-primary:hover { background: var(--brass-deep); }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--ink-text);
+  color: var(--ink-text);
+}
+.theme-ink .btn-outline { border-color: var(--paper-text-dim); color: var(--paper-text); }
+.btn-outline:hover { border-color: var(--brass-deep); color: var(--brass-deep); }
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-sm { padding: 8px 14px; font-size: 0.72rem; }
+
+/* -------------------------------------------------------------- pills --- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+
+.pill-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+.pill--verified { color: var(--verified); }
+.pill--flagged { color: var(--flagged); }
+.pill--warn { color: var(--warn); }
+.pill--neutral { color: var(--ink-text-dim); }
+.theme-ink .pill--neutral { color: var(--paper-text-dim); }
+
+/* -------------------------------------------------------------- stamp --- */
+
+.stamp {
+  width: 128px;
+  height: 128px;
+  flex: none;
+  transform: rotate(-7deg);
+}
+.stamp svg { width: 100%; height: 100%; display: block; }
+.stamp--verified { color: var(--verified); }
+.stamp--flagged { color: var(--flagged); }
+.stamp--pending { color: var(--ink-text-dim); }
+.theme-ink .stamp--pending { color: var(--paper-text-dim); }
+
+/* -------------------------------------------------------------- footer -- */
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 22px 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-text-dim);
+}
+.theme-ink .site-footer { border-top-color: var(--line-dark); color: var(--paper-text-dim); }

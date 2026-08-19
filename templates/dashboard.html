@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Invigil — Dashboard{% endblock %}
+{% block body_class %}theme-ink{% endblock %}
+{% block main_wrap %}wrap--wide{% endblock %}
+{% block header_wrap %}wrap--wide{% endblock %}
+{% block footer_wrap %}wrap--wide{% endblock %}
+{% block content %}
+
+<p class="eyebrow">Control room</p>
+<h1>Session ledger</h1>
+<p style="color: var(--paper-text-dim); max-width: 60ch;">
+  Every exam attempt, its score, and everything the proctor flagged along
+  the way. Open a session to review the timeline and evidence snapshots.
+</p>
+
+<div class="panel" style="margin-top: 24px; padding: 0;">
+  {% if sessions %}
+  <table class="ledger">
+    <thead>
+      <tr>
+        <th>Candidate</th>
+        <th>Started</th>
+        <th>Status</th>
+        <th>Score</th>
+        <th>Flags</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in sessions %}
+      {% set counts = s.violation_counts() %}
+      {% set total = counts.values() | sum %}
+      <tr>
+        <td class="student-name">{{ s.student.name }}</td>
+        <td class="cell-mono">{{ s.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>
+          {% if s.status == 'submitted' %}
+            <span class="pill pill--verified"><span class="pill-dot"></span>Submitted</span>
+          {% else %}
+            <span class="pill pill--warn"><span class="pill-dot"></span>In progress</span>
+          {% endif %}
+        </td>
+        <td class="cell-mono">{{ s.score if s.score is not none else '—' }}/{{ s.total_questions }}</td>
+        <td>
+          {% if total %}
+            <span class="pill pill--flagged"><span class="pill-dot"></span>{{ total }} flag{{ 's' if total != 1 else '' }}</span>
+          {% else %}
+            <span class="pill pill--neutral"><span class="pill-dot"></span>Clean</span>
+          {% endif %}
+        </td>
+        <td><a class="btn btn-outline btn-sm" href="{{ url_for('session_detail', session_id=s.id) }}">Review</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state" style="border-color: var(--line-dark); color: var(--paper-text-dim);">
+    No exam sessions yet.
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

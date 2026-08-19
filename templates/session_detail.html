@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Invigil — Session #{{ session.id }}{% endblock %}
+{% block body_class %}theme-ink{% endblock %}
+{% block content %}
+
+<p class="eyebrow"><a href="{{ url_for('dashboard') }}" style="color: inherit;">← Ledger</a></p>
+<h1>{{ student.name }}</h1>
+<p class="mono" style="color: var(--paper-text-dim);">
+  Session #{{ session.id }} · Started {{ session.start_time.strftime('%Y-%m-%d %H:%M:%S') }} UTC
+  {% if session.end_time %} · Ended {{ session.end_time.strftime('%H:%M:%S') }} UTC{% endif %}
+</p>
+
+<div class="panel" style="margin-top: 20px; display:flex; gap: 32px; flex-wrap: wrap;">
+  <div>
+    <div class="eyebrow">Status</div>
+    <div style="margin-top:4px;">
+      {% if session.status == 'submitted' %}
+        <span class="pill pill--verified"><span class="pill-dot"></span>Submitted</span>
+      {% else %}
+        <span class="pill pill--warn"><span class="pill-dot"></span>In progress</span>
+      {% endif %}
+    </div>
+  </div>
+  <div>
+    <div class="eyebrow">Score</div>
+    <div class="mono" style="margin-top:4px; font-size:1.1rem;">
+      {{ session.score if session.score is not none else '—' }}/{{ session.total_questions }}
+    </div>
+  </div>
+  <div>
+    <div class="eyebrow">Total flags</div>
+    <div class="mono" style="margin-top:4px; font-size:1.1rem;">{{ session.violations|length }}</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3 style="margin-bottom: 6px;">Timeline</h3>
+  {% if session.violations %}
+  <div class="timeline">
+    {% for v in session.violations %}
+    <div class="timeline-item">
+      <div class="timeline-item__time">{{ v.timestamp.strftime('%H:%M:%S') }}</div>
+      <div class="timeline-item__dot {{ severity.get(v.type, 'warn') }}"></div>
+      <div class="timeline-item__body">
+        <div class="type">{{ labels.get(v.type, v.type) }}</div>
+        {% if v.detail %}<div class="detail">{{ v.detail }}</div>{% endif %}
+        {% if v.snapshot_path %}
+        <img class="snapshot-thumb" src="{{ url_for('static', filename=v.snapshot_path) }}" alt="Evidence snapshot for {{ labels.get(v.type, v.type) }}">
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="mono" style="color: var(--verified);">No flags — clean session so far.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
